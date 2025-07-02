@@ -1,78 +1,116 @@
-if (window.location.href.match(/^https:\/\/github\.com\/.*$/)) {
-  function formatDateTime(date) {
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const str = new Intl.DateTimeFormat("en-US", {
-      timeZone: timeZone,
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    }).format(date);
-    return str;
+function formatTimeDelta(pastDate) {
+  const now = new Date();
+  let delta = Math.floor((now - pastDate) / 1000); // in seconds
+
+  const MINUTE = 60;
+  const HOUR = 60 * MINUTE;
+  const DAY = 24 * HOUR;
+  const MONTH = 30 * DAY; // Approximation
+  const YEAR = 365 * DAY; // Approximation
+
+  const parts = [];
+
+  const units = [
+    { label: 'year', seconds: YEAR },
+    { label: 'month', seconds: MONTH },
+    { label: 'day', seconds: DAY },
+    { label: 'hour', seconds: HOUR },
+    { label: 'minute', seconds: MINUTE },
+  ];
+
+  for (const unit of units) {
+    const count = Math.floor(delta / unit.seconds);
+    if (count) {
+      delta -= count * unit.seconds;
+      parts.push(
+        unit.label === 'y' || unit.label === 'd' || unit.label === 'h'
+          ? `${count} ${unit.label}`
+          : `${count} ${unit.label}${count !== 1 ? 's' : ''}`
+      );
+    }
+    if (parts.length === 3) break;
   }
 
-  function updateRunTimeDisplay() {
-    const timeElements = document.querySelectorAll("relative-time");
+  // If nothing added, add "0 minutes"s
+  if (parts.length === 0) {
+    parts.push('0 minutes');
+  }
 
-    console.log("Found time elements:", timeElements.length); // Debugging line
+  return `${parts.join(', ')} ago`;
+}
 
-    timeElements.forEach((el) => {
-      const fullTime = el.getAttribute("datetime");
-      const localTime = formatDateTime(new Date(fullTime));
-      if (fullTime && !el.classList.contains("full-time-updated")) {
-        const newElement = document.createElement("div");
-        newElement.textContent = `${localTime}`;
-        newElement.style.fontSize = "12px"; // A little smaller to fix the layout.
-        // newElement.style.cssText = 'position: absolute; top: 0; left: 0;';
-        el.parentElement.style = "position: relative; white-space: nowrap;";
-        // Hide the relative time.
-        // el.style = "display: none; visibility: hidden;";
+function updateRunTimeDisplay() {
+  const timeElements = document.querySelectorAll("relative-time:not(.full-time-updated)");
 
-        // Remove or hide the SVG element
-        const svgElement = el.parentElement.querySelector(
-          "svg.octicon-calendar",
-        );
-        if (svgElement) {
-          svgElement.style.display = "none"; // Hide the SVG element
-        }
-
-        // Insert the new element into the DOM
-        el.parentElement.insertBefore(newElement, el.nextSibling);
-        el.classList.add("full-time-updated");
-      }
+  timeElements.forEach((el) => {
+    const fullTime = el.getAttribute("datetime");
+    if (!fullTime) return;
+    const date = new Date(fullTime)
+    const niceDate = date.toLocaleString('en-US', { 
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        hour12: true 
     });
-  }
+    const timeAgo = formatTimeDelta(date).trim();
 
-  function hasClassWithSuffix(suffix) {
-    const allElements = document.querySelectorAll("*");
+    const replacement = document.createElement("span");
+    replacement.textContent = timeAgo;
+    replacement.title = niceDate;
 
-    counter = 0;
-    for (const element of allElements) {
-      for (const className of element.classList) {
-        if (className.endsWith(suffix)) {
-          counter++;
-          if (counter > 5) {
-            return true;
+    replacement.style.display = 'inline-block';
+    replacement.style.whiteSpace = 'nowrap';
+    replacement.style.width = '100%';
+    replacement.style.maxWidth = '100%';
+    replacement.style.overflow = 'hidden';
+    replacement.style.textOverflow = 'ellipsis';
+
+    replacement.className = el.className;
+
+    const parent = el.parentElement;
+    if (parent) {
+      parent.style.display = "inline";
+      parent.style.whiteSpace = "nowrap";
+    }
+
+    el.replaceWith(replacement);
+  });
+}
+
+
+function observeDOMChanges() {
+  const observer = new MutationObserver((mutations) => {
+    let shouldUpdate = false;
+
+    for (const mutation of mutations) {
+      if (mutation.type === "childList") {
+        for (const node of mutation.addedNodes) {
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            if (
+              node.matches("relative-time") ||
+              node.querySelector?.("relative-time")
+            ) {
+              shouldUpdate = true;
+              break;
+            }
           }
         }
       }
     }
 
-    return false;
-  }
-
-  function checkForChanges() {
-    const result = hasClassWithSuffix("full-time-updated");
-    if (!result) {
+    if (shouldUpdate) {
       updateRunTimeDisplay();
     }
-  }
+  });
 
-  // Initial call to update the display
-  updateRunTimeDisplay();
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
+}
 
-  // Set up a polling mechanism to check for changes every 2 seconds
-  setInterval(checkForChanges, 2000);
+if (window.location.href.match(/^https:\/\/github\.com\/.*$/)) {
+  observeDOMChanges();
 }
