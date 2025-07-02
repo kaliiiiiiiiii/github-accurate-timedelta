@@ -2,7 +2,8 @@ function formatTimeDelta(pastDate) {
   const now = new Date();
   let delta = Math.floor((now - pastDate) / 1000); // in seconds
 
-  const MINUTE = 60;
+  const SECOND = 1;
+  const MINUTE = 60 * SECOND;
   const HOUR = 60 * MINUTE;
   const DAY = 24 * HOUR;
   const MONTH = 30 * DAY; // Approximation
@@ -16,24 +17,21 @@ function formatTimeDelta(pastDate) {
     { label: 'day', seconds: DAY },
     { label: 'hour', seconds: HOUR },
     { label: 'minute', seconds: MINUTE },
+    { label: 'second', seconds: SECOND },
   ];
 
   for (const unit of units) {
     const count = Math.floor(delta / unit.seconds);
     if (count) {
       delta -= count * unit.seconds;
-      parts.push(
-        unit.label === 'y' || unit.label === 'd' || unit.label === 'h'
-          ? `${count} ${unit.label}`
-          : `${count} ${unit.label}${count !== 1 ? 's' : ''}`
-      );
+      parts.push(`${count} ${unit.label}${count !== 1 ? 's' : ''}`);
     }
     if (parts.length === 3) break;
   }
 
-  // If nothing added, add "0 minutes"s
+  // If nothing added, add "0 seconds"
   if (parts.length === 0) {
-    parts.push('0 minutes');
+    parts.push('0 seconds');
   }
 
   return `${parts.join(', ')} ago`;
