@@ -38,6 +38,7 @@ function formatTimeDelta(pastDate) {
 }
 
 function updateRunTimeDisplay() {
+  console.log('Testing')
   const timeElements = document.querySelectorAll("relative-time:not(.full-time-updated)");
 
   timeElements.forEach((el) => {
@@ -87,8 +88,7 @@ function observeDOMChanges() {
         for (const node of mutation.addedNodes) {
           if (node.nodeType === Node.ELEMENT_NODE) {
             if (
-              node.matches("relative-time") ||
-              node.querySelector?.("relative-time")
+              node.matches("relative-time") || node.querySelector?.("relative-time")
             ) {
               shouldUpdate = true;
               break;
