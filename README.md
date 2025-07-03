@@ -1,3 +1,5 @@
+# Why?
+See Github community discussion: https://github.com/orgs/community/discussions/58663
 
 # Installation
 Install from [Chrome Web Store]() (Not yet published -> TODO)
@@ -18,6 +20,7 @@ Tags
 
 #### Not applied on reload for Github Actions 
 Only occurrs on manual reload, tested with Chrome ([testing page](https://github.com/kaliiiiiiiiii/CatRoom/actions)).
+
 
 ## References
 - The [original extension](https://github.com/jan0991/github-actions-full-datetime)
