@@ -6,20 +6,27 @@ Install from [Chrome Web Store]() (Not yet published -> TODO)
 
 ## Result
 
-Releases
-<img width="100%" alt="Screenshot" src="static/screenshot.png">
 File browser
-<img width="100%" alt="Screenshot" src="static/screenshot2.png">
+<picture>
+  <source srcset="static/screenshot_release_dark.png" media="(prefers-color-scheme: dark)">
+  <source srcset="static/screenshot_release_light.png" media="(prefers-color-scheme: light)">
+  <img src="static/screenshot_release_dark.png" alt="File browser screenshot" width="100%">
+</picture>
+
+Main view
+<picture>
+  <source srcset="static/screenshot_main_dark.png" media="(prefers-color-scheme: dark)">
+  <source srcset="static/screenshot_main_light.png" media="(prefers-color-scheme: light)">
+  <img src="static/screenshot_main_dark.png" alt="Main screenshot" width="100%">
+</picture>
+
 Tags
-<img width="100%" alt="Screenshot" src="static/screenshot3.png">
+<picture>
+  <source srcset="static/screenshot_tags_dark.png" media="(prefers-color-scheme: dark)">
+  <source srcset="static/screenshot_tags_light.png" media="(prefers-color-scheme: light)">
+  <img src="static/screenshot_tags_dark.png" alt="Tags screenshot" width="100%">
+</picture>
 
-## Known bugs
-
-#### Element is off to top
-![off to top example](static/bug_one_off.png)
-
-#### Not applied on reload for Github Actions 
-Only occurrs on manual reload, tested with Chrome ([testing page](https://github.com/kaliiiiiiiiii/CatRoom/actions)).
 
 
 ## References
