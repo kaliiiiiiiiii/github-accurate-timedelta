@@ -1,4 +1,5 @@
 # Why?
+![Before after comprison](static/sreenshot_before_after.png)
 See Github community discussion: https://github.com/orgs/community/discussions/58663
 
 # Installation
