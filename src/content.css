@@ -10,16 +10,22 @@
 
 /* Centering timedelta for deployments page */
 
-div:has(.extension-timedelta) {
+div:has(> .extension-timedelta) {
   align-content: center;
 }
 
 /* Capping width on actions page */
 
-.d-none.d-md-block:has(.d-inline.d-md-block > .extension-timedelta) {
+.d-none.d-md-block:has(> .d-inline.d-md-block > .extension-timedelta) {
   max-width: 140px;
 }
 
 .d-none.d-md-block > .d-inline.d-md-block > .extension-timedelta {
   width: calc(100% - 16px);
+}
+
+/* Padding for repo code */
+.react-directory-commit-age:has(> .extension-timedelta) {
+  width: 100%;
+  display: inline-block !important;
 }
