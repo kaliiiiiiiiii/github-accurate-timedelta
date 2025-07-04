@@ -12,46 +12,48 @@ function formatTimeDelta(pastDate) {
   const parts = [];
 
   const units = [
-    { label: 'year', seconds: YEAR },
-    { label: 'month', seconds: MONTH },
-    { label: 'day', seconds: DAY },
-    { label: 'hour', seconds: HOUR },
-    { label: 'minute', seconds: MINUTE },
-    { label: 'second', seconds: SECOND },
+    { label: "year", seconds: YEAR },
+    { label: "month", seconds: MONTH },
+    { label: "day", seconds: DAY },
+    { label: "hour", seconds: HOUR },
+    { label: "minute", seconds: MINUTE },
+    { label: "second", seconds: SECOND },
   ];
 
   for (const unit of units) {
     const count = Math.floor(delta / unit.seconds);
     if (count) {
       delta -= count * unit.seconds;
-      parts.push(`${count} ${unit.label}${count !== 1 ? 's' : ''}`);
+      parts.push(`${count} ${unit.label}${count !== 1 ? "s" : ""}`);
     }
     if (parts.length === 3) break;
   }
 
   // If nothing added, add "0 seconds"
   if (parts.length === 0) {
-    parts.push('0 seconds');
+    parts.push("0 seconds");
   }
 
-  return `${parts.join(', ')} ago`;
+  return `${parts.join(", ")} ago`;
 }
 
 function updateRunTimeDisplay() {
-  console.log('Testing')
-  const timeElements = document.querySelectorAll("relative-time:not(.full-time-updated)");
+  console.log("update run time display");
+  const timeElements = document.querySelectorAll(
+    "relative-time:not(.full-time-updated)"
+  );
 
   timeElements.forEach((el) => {
     const fullTime = el.getAttribute("datetime");
     if (!fullTime) return;
-    const date = new Date(fullTime)
-    const niceDate = date.toLocaleString('en-US', { 
-        month: 'short', 
-        day: 'numeric', 
-        year: 'numeric', 
-        hour: '2-digit', 
-        minute: '2-digit', 
-        hour12: true 
+    const date = new Date(fullTime);
+    const niceDate = date.toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
     });
     const timeAgo = formatTimeDelta(date).trim();
 
@@ -59,14 +61,7 @@ function updateRunTimeDisplay() {
     replacement.textContent = timeAgo;
     replacement.title = niceDate;
 
-    replacement.style.display = 'inline-block';
-    replacement.style.whiteSpace = 'nowrap';
-    replacement.style.width = '100%';
-    replacement.style.maxWidth = '100%';
-    replacement.style.overflow = 'hidden';
-    replacement.style.textOverflow = 'ellipsis';
-
-    replacement.className = el.className;
+    replacement.className = el.className + " extension-timedelta";
 
     const parent = el.parentElement;
     if (parent) {
@@ -78,7 +73,6 @@ function updateRunTimeDisplay() {
   });
 }
 
-
 function observeDOMChanges() {
   const observer = new MutationObserver((mutations) => {
     let shouldUpdate = false;
@@ -88,13 +82,17 @@ function observeDOMChanges() {
         for (const node of mutation.addedNodes) {
           if (node.nodeType === Node.ELEMENT_NODE) {
             if (
-              node.matches("relative-time") || node.querySelector?.("relative-time")
+              node.matches("relative-time") ||
+              node.querySelector?.("relative-time")
             ) {
               shouldUpdate = true;
               break;
             }
           }
         }
+      } else if (mutation.type === "characterData") {
+        shouldUpdate = true;
+        break;
       }
     }
 
@@ -110,5 +108,6 @@ function observeDOMChanges() {
 }
 
 if (window.location.href.match(/^https:\/\/github\.com\/.*$/)) {
+  updateRunTimeDisplay(); // Needed for refresh on `actions` page
   observeDOMChanges();
 }

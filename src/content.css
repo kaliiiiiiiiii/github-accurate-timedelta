@@ -1,0 +1,25 @@
+.extension-timedelta {
+  display: inline-block;
+  white-space: nowrap;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+}
+
+/* Centering timedelta for deployments page */
+
+div:has(.extension-timedelta) {
+  align-content: center;
+}
+
+/* Capping width on actions page */
+
+.d-none.d-md-block:has(.d-inline.d-md-block > .extension-timedelta) {
+  max-width: 140px;
+}
+
+.d-none.d-md-block > .d-inline.d-md-block > .extension-timedelta {
+  width: calc(100% - 16px);
+}
