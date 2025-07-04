@@ -38,7 +38,6 @@ function formatTimeDelta(pastDate) {
 }
 
 function updateRunTimeDisplay() {
-  console.log("update run time display");
   const timeElements = document.querySelectorAll(
     "relative-time:not(.full-time-updated)"
   );
