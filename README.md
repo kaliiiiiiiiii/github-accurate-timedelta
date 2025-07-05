@@ -10,7 +10,7 @@ Install from [Chrome Web Store](https://chromewebstore.google.com/detail/github-
 File browser
 <picture>
   <source 
-    srcset="https://raw.githubusercontent.com/kaliiiiiiiiii/github-accurate-timedelta/refs/heads/main/static/screenshot_release_dark.png" 
+    srcset="raw/main/static/screenshot_release_dark.png" 
     media="(prefers-color-scheme: dark)" />
   <img src="static/screenshot_release_light.png" alt="File browser screenshot" width="100%" />
 </picture>
@@ -18,7 +18,7 @@ File browser
 Main view
 <picture>
   <source 
-    srcset="https://raw.githubusercontent.com/kaliiiiiiiiii/github-accurate-timedelta/refs/heads/main/static/screenshot_main_dark.png" 
+    srcset="raw/main/static/screenshot_main_dark.png" 
     media="(prefers-color-scheme: dark)" />
   <img src="static/screenshot_main_light.png" alt="Main screenshot" width="100%" />
 </picture>
@@ -26,7 +26,7 @@ Main view
 Tags
 <picture>
   <source 
-    srcset="https://raw.githubusercontent.com/kaliiiiiiiiii/github-accurate-timedelta/refs/heads/main/static/screenshot_tags_dark.png" 
+    srcset="raw/main/static/screenshot_tags_dark.png" 
     media="(prefers-color-scheme: dark)" />
   <img src="static/screenshot_tags_light.png" alt="Tags screenshot" width="100%" />
 </picture>
